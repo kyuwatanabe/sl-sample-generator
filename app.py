@@ -19,7 +19,12 @@ def initialize():
         excel_path = os.path.join(os.path.dirname(__file__), '米国での業務内容.xlsx')
         df = pd.read_excel(excel_path, sheet_name='米国での業務内容')
     if client is None:
-        client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+        api_key = os.getenv('OPENAI_API_KEY')
+        if not api_key:
+            print(f"ERROR: OPENAI_API_KEY not found. Environment variables: {list(os.environ.keys())}")
+            raise ValueError("OPENAI_API_KEY environment variable is not set")
+        print(f"INFO: OPENAI_API_KEY found (length: {len(api_key)})")
+        client = OpenAI(api_key=api_key)
 
 # 管理職とスタッフの判定辞書
 management_positions = [
